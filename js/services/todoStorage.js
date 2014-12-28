@@ -27,30 +27,6 @@ angular.module('todomvc')
 		var store = {
 			todos: [],
 
-			clearCompleted: function () {
-				var originalTodos = store.todos.slice(0);
-
-				var completeTodos = [];
-				var incompleteTodos = [];
-				store.todos.forEach(function (todo) {
-					if (todo.completed) {
-						completeTodos.push(todo);
-					} else {
-						incompleteTodos.push(todo);
-					}
-				});
-
-				angular.copy(incompleteTodos, store.todos);
-
-				return $http.delete('/api/todos')
-					.then(function success() {
-						return store.todos;
-					}, function error() {
-						angular.copy(originalTodos, store.todos);
-						return originalTodos;
-					});
-			},
-
 			delete: function (todo) {
 				var originalTodos = store.todos.slice(0);
 
@@ -117,27 +93,6 @@ angular.module('todomvc')
 
 			_saveToLocalStorage: function (todos) {
 				localStorage.setItem(STORAGE_ID, JSON.stringify(todos));
-			},
-
-			clearCompleted: function () {
-				var deferred = $q.defer();
-
-				var completeTodos = [];
-				var incompleteTodos = [];
-				store.todos.forEach(function (todo) {
-					if (todo.completed) {
-						completeTodos.push(todo);
-					} else {
-						incompleteTodos.push(todo);
-					}
-				});
-
-				angular.copy(incompleteTodos, store.todos);
-
-				store._saveToLocalStorage(store.todos);
-				deferred.resolve(store.todos);
-
-				return deferred.promise;
 			},
 
 			delete: function (todo) {
